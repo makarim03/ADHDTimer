@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
+        <style>
+            body {
+                margin: 0;
+                background-color: #000000;
+                color: #ede5ff;
+                font-family: "Poppins";
+                display: grid;
+                place-items: center;
+            }
+            .card {
+                width: calc(100vw - 80px);
+                max-width: 800px;
+                margin: 20px;
+                padding: 20px;
+                background-color: #9e77ff11;
+                border: solid 1px #9e77ff22;
+                border-radius: 10px;
+                box-shadow: 0 5px 30px #9e77ff22;
+                display: grid;
+                grid: 1fr / 1fr 1fr;
+            }
+            .data {
+                display: grid;
+                place-self: center;
+            }
+            .event {
+                font-size: 16px;
+                font-weight: 600;
+            }
+            .time {
+                font-size: 12px;
+                font-weight: 200;
+            }
+            .countdown {
+                display: grid;
+                place-self: center;
+            }
+            .stamp {
+                font-size: 21px;
+                font-weight: 200;
+            }
+            .unit {
+                font-size: 12px;
+                font-weight: 400;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            async function getData() {
+                try {
+                    const res = await fetch('data.json')
+                    if (!res.ok) {
+                        throw new Error(res.status)
+                    }
+                    const json = await res.json()
+                    render(json)
+                } catch(_) {
+                    console.error(_);
+                }
+            }
+            const render = _ => {
+                Object.keys(_).map(__=>{
+                    document.body.innerHTML += `
+                    <div class="card">
+                        <div class="data">
+                            <div class="event">${__}</div>
+                            <div class="time">${format(_[__])}</div>
+                        </div>
+                        <div class="countdown">
+                            <div><span class="stamp" id="${_[__]}"></span> <span class="unit">sec</span></div>
+                        </div>
+                    </div>
+                    `
+                })
+            }
+            const format = _ => {
+                const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]
+                const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"]
+                
+                const date = new Date(_);
+                const dayOfWeek = days[date.getDay()]
+                const dayOfMonth = date.getDate()
+                const month = months[date.getMonth()]
+                const year = date.getFullYear()
+                const hours = String(date.getHours()).padStart(2, '0')
+                const minutes = String(date.getMinutes()).padStart(2, '0')
+
+                return `${dayOfWeek}, ${dayOfMonth} ${month} ${year}, ${hours}:${minutes}`
+            }
+            setInterval(_=>{
+                [... document.querySelectorAll('.stamp')].map(_=>{
+                    _.innerHTML = parseInt((_.id-Date.now())/1000)
+                })
+            }, 1000)
+            getData()
+        </script>
+    </body>
+</html>
