@@ -8,6 +8,8 @@
                 background-color: #000000;
                 color: #ede5ff;
                 font-family: "Poppins";
+            }
+            .content {
                 display: grid;
                 place-items: center;
             }
@@ -47,9 +49,31 @@
                 font-size: 12px;
                 font-weight: 400;
             }
+            .github {
+                width: 100vw;
+                height: 50px;
+                background-color: #9e77ff11;
+                border: solid 1px #9e77ff22;
+                box-shadow: 0 -5px 30px #9e77ff22;
+                display: grid;
+                place-items: center;
+                position: fixed;
+                bottom: 0;
+                font-size: 12px;
+                font-weight: 600;
+            }
+            a {
+                color: #ede5ff;
+            }
         </style>
     </head>
     <body>
+        <div class="content">
+
+        </div>
+        <a target="_blank" href="https://github.com/naufal-makarim/T/edit/main/data.json"><div class="github">
+            Manage Schedules
+        </div></a>
         <script>
             async function getData() {
                 try {
@@ -65,7 +89,7 @@
             }
             const render = _ => {
                 Object.keys(_).map(__=>{
-                    document.body.innerHTML += `
+                    document.querySelector('.content').innerHTML += `
                     <div class="card">
                         <div class="data">
                             <div class="event">${__}</div>
