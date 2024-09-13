@@ -8,15 +8,16 @@
                 background-color: #000000;
                 color: #ede5ff;
                 font-family: "Poppins";
+                overflow-x: hidden;
             }
-            .content {
+            .content, .data, .countdown {
                 display: grid;
                 place-items: center;
             }
             .card {
                 width: calc(100vw - 80px);
                 max-width: 800px;
-                margin: 20px;
+                margin: 10px 20px;
                 padding: 20px;
                 background-color: #9e77ff11;
                 border: solid 1px #9e77ff22;
@@ -24,10 +25,6 @@
                 box-shadow: 0 5px 30px #9e77ff22;
                 display: grid;
                 grid: 1fr / 1fr 1fr;
-            }
-            .data {
-                display: grid;
-                place-self: center;
             }
             .event {
                 font-size: 16px;
@@ -37,22 +34,18 @@
                 font-size: 12px;
                 font-weight: 200;
             }
-            .countdown {
-                display: grid;
-                place-self: center;
-            }
             .stamp {
                 font-size: 21px;
                 font-weight: 200;
             }
-            .unit {
+            .unit, .copy {
                 font-size: 12px;
                 font-weight: 400;
             }
             .github {
                 width: 100vw;
                 height: 50px;
-                background-color: #9e77ff11;
+                background-color: #0b0811;
                 border: solid 1px #9e77ff22;
                 box-shadow: 0 -5px 30px #9e77ff22;
                 display: grid;
@@ -65,16 +58,69 @@
             a {
                 color: #ede5ff;
             }
+            input {
+                height: 30px;
+                background-color: #9e77ff11;
+                border: solid 1px #9e77ff22;
+                font-family: "Poppins";
+                color: #ede5ff;
+                border-radius: 5px;
+                margin: 5px;
+            }
+            .picker {
+                width: 100vw;
+                display: grid;
+                margin: 0 0 60px 0;
+            }
+            .picker > div {
+                width: calc(100vw - 80px);
+                max-width: 800px;
+                display: grid;
+                place-self: center;
+                place-items: center;
+            }
+            .copy {
+                width: 150px;
+                height: 30px;
+                background-color: #9e77ff11;
+                border: solid 1px #9e77ff22;
+                box-shadow: 0 -5px 30px #9e77ff22;
+                display: grid;
+                place-items: center;
+                border-radius: 5px;
+                margin: 5px;
+            }
         </style>
     </head>
     <body>
         <div class="content">
 
         </div>
+        <div class="picker">
+            <div>
+                <input type="text" class="itext">
+                <input type="date" class="idate">
+                <input type="time" class="itime">
+                <div class="copy">Copy to Clipboard</div>
+            </div>
+        </div>
         <a target="_blank" href="https://github.com/naufal-makarim/T/edit/main/data.json"><div class="github">
             Manage Schedules
         </div></a>
         <script>
+            document.querySelector('.copy').addEventListener('click', _ => {
+                const event = document.querySelector('.itext')
+                const date = document.querySelector('.idate')
+                const time = document.querySelector('.itime')
+                const stamp = new Date(date.value + ' ' + time.value)
+
+                copy = `"${event.value}": ${stamp.getTime()}`
+                navigator.clipboard.writeText(copy)
+
+                event.value = copy
+                date.value = ''
+                time.value = ''
+            })
             async function getData() {
                 try {
                     const res = await fetch('data.json')
